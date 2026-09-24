@@ -2,6 +2,7 @@ import { cache } from 'react';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { prisma } from '@/lib/prisma';
 import type { AuthenticatedUser } from '@/types';
+import type { RoleName } from '@/config/roles';
 
 /**
  * Returns the currently authenticated user (from Supabase Auth) merged with
@@ -30,7 +31,7 @@ export const getCurrentUser = cache(async (): Promise<AuthenticatedUser | null> 
     email: dbUser.email,
     fullName: dbUser.fullName,
     avatarUrl: dbUser.avatarUrl,
-    roles: dbUser.roles.map((ur) => ur.role.name),
+        roles: dbUser.roles.map((ur) => ur.role.name as RoleName),
   };
 });
 
