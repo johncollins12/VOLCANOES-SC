@@ -1,16 +1,14 @@
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
-import { DataTable } from '@/components/cms/DataTable';
 import { URLPagination } from '@/components/cms/URLPagination';
 import { getGalleryAlbums } from '@/lib/data';
-import { AlbumRowActions } from './AlbumRowActions';
+import { GalleryTable } from './GalleryTable';
 
 interface AdminGalleryPageProps {
   searchParams: Promise<{ page?: string }>;
 }
 
-/** /admin/gallery — reuses getGalleryAlbums directly (no admin-only filter exists on GalleryAlbum, so one query serves both the public index and this list). */
 export default async function AdminGalleryPage({ searchParams }: AdminGalleryPageProps) {
   const { page: pageParam } = await searchParams;
   const page = Math.max(1, Number(pageParam) || 1);
@@ -29,26 +27,7 @@ export default async function AdminGalleryPage({ searchParams }: AdminGalleryPag
         </Link>
       </div>
 
-      <DataTable
-        columns={[
-          {
-            key: 'title',
-            header: 'Title',
-            render: (a) => (
-              <Link href={`/admin/gallery/${a.id}/edit`} className="font-medium text-ink hover:text-cyan">
-                {a.title}
-              </Link>
-            ),
-          },
-          { key: 'images', header: 'Photos', render: (a) => a.imageCount },
-          { key: 'order', header: 'Order', render: (a) => a.displayOrder },
-          { key: 'actions', header: '', render: (a) => <AlbumRowActions id={a.id} title={a.title} /> },
-        ]}
-        data={albums.items}
-        getRowId={(a) => a.id}
-        emptyTitle="No albums yet"
-        emptyDescription="Create your first album to get started."
-      />
+      <GalleryTable items={albums.items} />
 
       <URLPagination page={albums.page} totalPages={albums.totalPages} className="mt-4" />
     </div>

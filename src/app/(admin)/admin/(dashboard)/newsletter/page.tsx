@@ -1,14 +1,11 @@
 import Link from 'next/link';
 import { Download } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
 import { StatisticCard } from '@/components/ui/StatisticCard';
-import { DataTable } from '@/components/cms/DataTable';
 import { URLPagination } from '@/components/cms/URLPagination';
 import { AdminSearchBox } from '@/components/cms/AdminSearchBox';
-import { formatDisplayDate } from '@/lib/utils';
 import { getAdminSubscribersList, getSubscriberStats } from '@/lib/data';
-import { SubscriberRowActions } from './SubscriberRowActions';
+import { NewsletterTable } from './NewsletterTable';
 
 interface AdminNewsletterPageProps {
   searchParams: Promise<{ page?: string; q?: string }>;
@@ -45,22 +42,7 @@ export default async function AdminNewsletterPage({ searchParams }: AdminNewslet
         <AdminSearchBox placeholder="Search by email…" />
       </div>
 
-      <DataTable
-        columns={[
-          { key: 'email', header: 'Email', render: (s) => s.email },
-          { key: 'subscribed', header: 'Subscribed', render: (s) => formatDisplayDate(s.subscribedAt) },
-          {
-            key: 'status',
-            header: 'Status',
-            render: (s) => <Badge variant={s.isActive ? 'success' : 'muted'}>{s.isActive ? 'Active' : 'Unsubscribed'}</Badge>,
-          },
-          { key: 'actions', header: '', render: (s) => <SubscriberRowActions id={s.id} email={s.email} isActive={s.isActive} /> },
-        ]}
-        data={subscribers.items}
-        getRowId={(s) => s.id}
-        emptyTitle="No subscribers yet"
-        emptyDescription="Newsletter signups from the homepage will appear here."
-      />
+      <NewsletterTable items={subscribers.items} />
 
       <URLPagination page={subscribers.page} totalPages={subscribers.totalPages} className="mt-4" />
     </div>
