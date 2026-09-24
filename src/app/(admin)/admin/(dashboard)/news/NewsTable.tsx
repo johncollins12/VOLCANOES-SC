@@ -5,14 +5,14 @@ import { Badge } from '@/components/ui/Badge';
 import { DataTable } from '@/components/cms/DataTable';
 import { formatDisplayDate } from '@/lib/utils';
 import { NewsRowActions } from './NewsRowActions';
-import type { AdminNewsRow } from '@/lib/data/news';
+import type { AdminNewsArticleRow } from '@/lib/data/news';
 
 const STATUS_BADGE: Record<string, 'success' | 'muted' | 'default'> = {
   PUBLISHED: 'success',
   DRAFT: 'muted',
 };
 
-export function NewsTable({ items }: { items: AdminNewsRow[] }) {
+export function NewsTable({ items }: { items: AdminNewsArticleRow[] }) {
   return (
     <DataTable
       columns={[
