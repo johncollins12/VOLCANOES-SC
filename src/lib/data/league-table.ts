@@ -94,7 +94,7 @@ export async function getHomeLeagueTableSnapshot(topN = 5): Promise<LeagueTableR
 /**
  * The full, unsliced current-season standings for /table.
  *
- * Form (last 5 results) is only ever populated for Volcanoes FC's own
+ * Form (last 5 results) is only ever populated for SC Volcanoes' own
  * row — see the SCHEMA LIMITATION note on LeagueTableRow.form in
  * components/football/LeagueTable.tsx: opponents are free-text names on
  * Fixture, not linked Team records with their own fixture history, so

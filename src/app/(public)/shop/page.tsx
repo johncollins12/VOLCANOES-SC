@@ -4,7 +4,7 @@ import { ComingSoon } from '@/components/ui/ComingSoon';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Club Shop',
-  description: 'The Volcanoes FC club shop is coming soon.',
+  description: 'The SC Volcanoes club shop is coming soon.',
   path: '/shop',
   noIndex: true,
 });

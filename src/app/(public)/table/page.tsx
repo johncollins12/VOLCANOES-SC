@@ -12,7 +12,7 @@ export const revalidate = 300;
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'League Table',
-  description: "Track Volcanoes FC's position in the FUFA Big League.",
+  description: "Track SC Volcanoes' position in the FUFA Big League.",
   path: '/table',
 });
 
@@ -21,7 +21,7 @@ interface TablePageProps {
 }
 
 /**
- * /table — the full current-season standings. Volcanoes FC's own row
+ * /table — the full current-season standings. SC Volcanoes' own row
  * is highlighted by LeagueTable (via `isOwnTeam`) and is the only
  * row with a Form indicator populated — see the SCHEMA LIMITATION comment
  * on LeagueTableRow.form (components/football/LeagueTable.tsx) for why
@@ -42,7 +42,7 @@ export default async function TablePage({ searchParams }: TablePageProps) {
         <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
           <div>
             <h1 className="font-display text-3xl font-semibold text-ink">Table</h1>
-            <p className="mt-1 text-sm text-muted">Track Volcanoes FC&rsquo;s position in the {SITE_CONFIG.competitionName}.</p>
+            <p className="mt-1 text-sm text-muted">Track SC Volcanoes&rsquo; position in the {SITE_CONFIG.competitionName}.</p>
           </div>
           <CompetitionFilter competitions={competitions} />
         </div>

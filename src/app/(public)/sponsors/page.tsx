@@ -9,7 +9,7 @@ export const revalidate = 300;
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Sponsors',
-  description: 'Volcanoes FC sponsors and partners.',
+  description: 'SC Volcanoes sponsors and partners.',
   path: '/sponsors',
 });
 
@@ -26,7 +26,7 @@ export default async function SponsorsPage() {
     <Section>
       <Container>
         <h1 className="mb-2 font-display text-3xl font-semibold text-ink">Sponsors</h1>
-        <p className="mb-6 text-sm text-muted">The partners supporting Volcanoes FC.</p>
+        <p className="mb-6 text-sm text-muted">The partners supporting SC Volcanoes.</p>
 
         {sponsors.length === 0 ? (
           <EmptyState title="No sponsors yet" description="Sponsor logos will appear here once added from the admin dashboard." />

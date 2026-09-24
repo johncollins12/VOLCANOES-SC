@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_CONFIG.name}`,
   },
   description:
-    'Official digital home of Volcanoes FC — news, fixtures, results, squad, and more.',
+    'Official digital home of SC Volcanoes — news, fixtures, results, squad, and more.',
 };
 
 const THEME_INIT_SCRIPT = `

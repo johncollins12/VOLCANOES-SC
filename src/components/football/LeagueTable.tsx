@@ -18,7 +18,7 @@ export interface LeagueTableRow {
    * SCHEMA LIMITATION: opponent teams are stored as free-text names on
    * Fixture (homeTeamName/awayTeamName), not as linked Team records with
    * their own fixture history — so form can only ever be computed for
-   * Volcanoes FC's own row (see getFullLeagueTable in
+   * SC Volcanoes' own row (see getFullLeagueTable in
    * src/lib/data/league-table.ts). Leave this undefined for every other
    * row rather than fabricating results the data can't support; the
    * column itself only renders where at least one row provides it.

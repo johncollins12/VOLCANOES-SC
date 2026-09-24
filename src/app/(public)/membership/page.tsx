@@ -4,7 +4,7 @@ import { ComingSoon } from '@/components/ui/ComingSoon';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Membership',
-  description: 'Fan membership for Volcanoes FC is coming soon.',
+  description: 'Fan membership for SC Volcanoes is coming soon.',
   path: '/membership',
   noIndex: true,
 });

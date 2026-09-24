@@ -10,7 +10,7 @@ export const revalidate = 300;
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Match Reports',
-  description: 'In-depth match reports from Volcanoes FC fixtures.',
+  description: 'In-depth match reports from SC Volcanoes fixtures.',
   path: '/match-reports',
 });
 

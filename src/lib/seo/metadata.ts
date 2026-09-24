@@ -10,7 +10,7 @@ import { SITE_CONFIG } from '@/config/site';
  * Usage in a page.tsx:
  *   export const metadata = buildPageMetadata({
  *     title: 'Fixtures',
- *     description: 'Upcoming Volcanoes FC fixtures.',
+ *     description: 'Upcoming SC Volcanoes fixtures.',
  *     path: '/fixtures',
  *   });
  */

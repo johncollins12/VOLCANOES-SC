@@ -11,7 +11,7 @@ export const revalidate = 60;
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Fixtures',
-  description: 'Upcoming Volcanoes FC fixtures — competition, opponent, venue, and kickoff time.',
+  description: 'Upcoming SC Volcanoes fixtures — competition, opponent, venue, and kickoff time.',
   path: '/fixtures',
 });
 

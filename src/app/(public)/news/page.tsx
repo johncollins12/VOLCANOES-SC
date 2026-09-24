@@ -11,7 +11,7 @@ export const revalidate = 60;
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'News',
-  description: 'The latest news, updates, and announcements from Volcanoes FC.',
+  description: 'The latest news, updates, and announcements from SC Volcanoes.',
   path: '/news',
 });
 

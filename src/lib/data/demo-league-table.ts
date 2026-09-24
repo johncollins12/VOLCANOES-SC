@@ -10,14 +10,14 @@ import type { LeagueTableRow } from '@/components/football/LeagueTable';
  * getFullLeagueTable()/getHomeLeagueTableSnapshot() (src/lib/data/league-table.ts)
  * return real rows instead and this file is never touched.
  *
- * Team names: Volcanoes FC (this club) plus a set of real, publicly
+ * Team names: SC Volcanoes (this club) plus a set of real, publicly
  * known FUFA Big League clubs (Uganda's second tier) — Kiyinda Boys FC,
  * Paidha Black Angels, and Iganga United FC were specifically requested;
  * Kataka FC, Calvary FC, Busoga United, and Ndejje University FC are
  * other clubs that have competed in the Big League. Using real club
  * names (rather than invented ones) makes the demo table look like a
  * genuine Big League table — but the PLACEMENT, POINTS, and RECORD shown
- * for every club here (Volcanoes FC included) are entirely illustrative
+ * for every club here (SC Volcanoes included) are entirely illustrative
  * and must never be presented as those clubs' actual current standings.
  * Every page that renders this array MUST show a visible "demo/preview
  * data" notice alongside it — see the `isDemo` flag returned by the
@@ -28,7 +28,7 @@ export const DEMO_LEAGUE_TABLE_ROWS: LeagueTableRow[] = [
   { position: 2, teamName: 'Busoga United', played: 18, won: 12, drawn: 4, lost: 2, goalsFor: 30, goalsAgainst: 16, points: 40 },
   {
     position: 3,
-    teamName: 'Volcanoes FC',
+    teamName: 'SC Volcanoes',
     played: 18,
     won: 11,
     drawn: 4,

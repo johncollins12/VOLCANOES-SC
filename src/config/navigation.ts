@@ -51,7 +51,7 @@ export const PRIMARY_NAV: NavItem[] = [
     ],
     featured: {
       title: 'Fan Membership',
-      description: 'Become a member and back Volcanoes FC all season long.',
+      description: 'Become a member and back SC Volcanoes all season long.',
       href: '/membership',
       ctaLabel: 'Join now',
     },

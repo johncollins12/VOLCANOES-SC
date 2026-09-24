@@ -11,7 +11,7 @@ export function cn(...inputs: ClassValue[]): string {
 }
 
 /**
- * Turns "Volcanoes FC" into "volcanoes-fc" — used for news article
+ * Turns "SC Volcanoes" into "volcanoes-fc" — used for news article
  * slugs, product slugs, etc. Kept pure/deterministic so it can run both
  * client- and server-side.
  */

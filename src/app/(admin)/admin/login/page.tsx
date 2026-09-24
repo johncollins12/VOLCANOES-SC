@@ -26,7 +26,7 @@ export default function AdminLoginPage() {
           <div className="flex flex-col items-center gap-2 text-center">
             <LogoMark className="h-12 w-12" />
             <h1 className="font-display text-xl">Staff Login</h1>
-            <p className="text-sm text-muted">Sign in to manage the Volcanoes FC website.</p>
+            <p className="text-sm text-muted">Sign in to manage the SC Volcanoes website.</p>
           </div>
 
           <form action={formAction} className="flex flex-col gap-4">

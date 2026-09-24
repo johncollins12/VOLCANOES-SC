@@ -11,7 +11,7 @@ export const revalidate = 60;
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Results',
-  description: 'Recent Volcanoes FC match results and scorelines.',
+  description: 'Recent SC Volcanoes match results and scorelines.',
   path: '/results',
 });
 
@@ -47,7 +47,7 @@ export default async function ResultsPage({ searchParams }: ResultsPageProps) {
           <h1 className="font-display text-3xl font-semibold text-ink">Results</h1>
           <CompetitionFilter competitions={competitions} />
         </div>
-        <p className="mb-6 text-sm text-muted">Follow every result from Volcanoes FC.</p>
+        <p className="mb-6 text-sm text-muted">Follow every result from SC Volcanoes.</p>
 
         {results.items.length === 0 ? (
           <EmptyState

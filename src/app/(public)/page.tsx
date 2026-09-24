@@ -31,7 +31,7 @@ export const revalidate = 60;
 export const metadata: Metadata = buildPageMetadata({
   title: 'Home',
   description:
-    'Official website of Volcanoes FC — latest news, fixtures, results, league standings, and more.', // ⚠️ CLUB INPUT NEEDED: refine once official positioning/copy is confirmed
+    'Official website of SC Volcanoes — latest news, fixtures, results, league standings, and more.', // ⚠️ CLUB INPUT NEEDED: refine once official positioning/copy is confirmed
   path: '/',
 });
 

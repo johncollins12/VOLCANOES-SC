@@ -10,7 +10,7 @@ export const revalidate = 60;
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Squad',
-  description: 'The full Volcanoes FC squad — players, positions, and profiles.',
+  description: 'The full SC Volcanoes squad — players, positions, and profiles.',
   path: '/team',
 });
 
@@ -33,7 +33,7 @@ export default async function TeamPage() {
           <h1 className="font-display text-3xl font-semibold text-ink">Players</h1>
           {currentSeason && <span className="text-sm text-muted">{currentSeason.label}</span>}
         </div>
-        <p className="mb-1 text-sm text-muted">Meet the Volcanoes FC squad.</p>
+        <p className="mb-1 text-sm text-muted">Meet the SC Volcanoes squad.</p>
         <p className="mb-8 max-w-2xl text-sm text-muted">
           {overview.totalPlayers > 0
             ? `${overview.totalPlayers} players across the squad — filter by position or search by name below.`

@@ -8,7 +8,7 @@ const FAN_ACTIONS = [
   { label: 'Buy Tickets', href: '/tickets', icon: Ticket, description: 'Secure your seat for the next match.' },
   { label: 'Club Shop', href: '/shop', icon: ShoppingBag, description: 'Official jerseys and merchandise.' },
   { label: 'Membership', href: '/membership', icon: Users, description: 'Join the Den as a fan member.' },
-  { label: 'Contact Club', href: '/contact', icon: Mail, description: 'Get in touch with Volcanoes FC.' },
+  { label: 'Contact Club', href: '/contact', icon: Mail, description: 'Get in touch with SC Volcanoes.' },
 ] as const;
 
 /**

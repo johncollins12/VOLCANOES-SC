@@ -63,7 +63,7 @@ export function Hero({ backgroundImageUrl, motto, foundedYear }: HeroProps) {
         </div>
 
         <h1 className="font-display text-4xl font-bold leading-tight sm:text-6xl">{SITE_CONFIG.name}</h1>
-
+        <p className="text-sm font-semibold uppercase tracking-widest text-white/60">{SITE_CONFIG.nickname}</p>
         {/* Motto placeholder — falls back to this generic line until a
             motto exists in either ClubProfile or SITE_CONFIG. */}
         <p className="max-w-xl text-base text-white/70 sm:text-lg">

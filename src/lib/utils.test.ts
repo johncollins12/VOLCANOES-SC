@@ -3,7 +3,7 @@ import { slugify, truncateText, formatDisplayDate, cn } from './utils';
 
 describe('slugify', () => {
   it('lowercases and hyphenates', () => {
-    expect(slugify('Volcanoes FC')).toBe('volcanoes-fc');
+    expect(slugify('SC Volcanoes')).toBe('volcanoes-fc');
   });
 
   it('strips punctuation', () => {

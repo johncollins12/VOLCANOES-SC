@@ -10,7 +10,7 @@ export const revalidate = 300;
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Gallery',
-  description: 'Photo albums from Volcanoes FC matches and events.',
+  description: 'Photo albums from SC Volcanoes matches and events.',
   path: '/gallery',
 });
 

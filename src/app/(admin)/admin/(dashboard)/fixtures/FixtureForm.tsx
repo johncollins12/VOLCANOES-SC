@@ -68,7 +68,7 @@ export function FixtureForm({ seasons, competitions, venues, fixture, action }: 
           name="homeTeamName"
           label="Home Team"
           required
-          defaultValue={fixture?.homeTeamName ?? 'Volcanoes FC'}
+          defaultValue={fixture?.homeTeamName ?? 'SC Volcanoes'}
           error={fieldErrors?.homeTeamName?.[0]}
         />
         <Input
@@ -84,7 +84,7 @@ export function FixtureForm({ seasons, competitions, venues, fixture, action }: 
       <Checkbox
         id="isHome"
         name="isHome"
-        label="Volcanoes FC are the home side"
+        label="SC Volcanoes are the home side"
         description="Determines the Home/Away badge shown on the public site."
         defaultChecked={fixture?.isHome ?? true}
       />

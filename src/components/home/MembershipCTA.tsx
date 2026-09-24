@@ -15,7 +15,7 @@ export function MembershipCTA() {
       <Container className="flex flex-col items-center gap-5 py-16 text-center">
         <h2 className="font-display text-2xl font-semibold sm:text-3xl">Join the Den</h2>
         <p className="max-w-lg text-white/70">
-          Become a Volcanoes FC fan member and never miss a moment — details on tiers and
+          Become a SC Volcanoes fan member and never miss a moment — details on tiers and
           benefits coming soon.
         </p>
         <div className="flex flex-wrap justify-center gap-3">

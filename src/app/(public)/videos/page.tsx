@@ -11,7 +11,7 @@ export const revalidate = 300;
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Videos',
-  description: 'Match highlights, interviews, and behind-the-scenes videos from Volcanoes FC.',
+  description: 'Match highlights, interviews, and behind-the-scenes videos from SC Volcanoes.',
   path: '/videos',
 });
 

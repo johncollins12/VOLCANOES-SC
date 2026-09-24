@@ -27,7 +27,7 @@ export function LeagueTableSnapshotSection({ rows, isDemo }: LeagueTableSnapshot
             Full table →
           </Link>
         </div>
-        <p className="mb-6 text-sm text-muted">Track Volcanoes FC&rsquo;s position in the {SITE_CONFIG.competitionName}.</p>
+        <p className="mb-6 text-sm text-muted">Track SC Volcanoes&rsquo; position in the {SITE_CONFIG.competitionName}.</p>
 
         {isDemo && (
           <div className="mb-4 flex items-start gap-2 rounded-card border border-gold/40 bg-gold/10 p-3 text-sm text-ink">

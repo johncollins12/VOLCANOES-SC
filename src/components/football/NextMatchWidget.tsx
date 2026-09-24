@@ -34,8 +34,8 @@ export function NextMatchWidget({
     <div className={cn('rounded-card border border-border bg-surface p-4 shadow-card', className)}>
       <p className="text-xs font-semibold uppercase tracking-wide text-muted">Next Match</p>
       <p className="mt-2 font-display text-lg font-semibold text-ink">
-        {isHome ? 'Volcanoes FC' : opponentName} <span className="text-muted">vs</span>{' '}
-        {isHome ? opponentName : 'Volcanoes FC'}
+        {isHome ? 'SC Volcanoes' : opponentName} <span className="text-muted">vs</span>{' '}
+        {isHome ? opponentName : 'SC Volcanoes'}
       </p>
       <p className="text-xs text-muted">{competitionName}</p>
 
