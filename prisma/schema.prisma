@@ -1,0 +1,534 @@
+// schema.prisma
+// Mukono Tigers SC — Phase 0 Foundation schema (approved architecture v1.0)
+// Fields marked with a preceding comment "⚠️" require real club data before
+// go-live — see docs/CLUB_INFO_NEEDED.md. Structure/relations are final;
+// only literal values are placeholders.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ───────────────────────────────
+// AUTH & ROLES
+// ───────────────────────────────
+
+model User {
+  id            String    @id @default(uuid()) // maps to Supabase auth.users.id
+  email         String    @unique
+  fullName      String
+  avatarUrl     String?
+  isActive      Boolean   @default(true)
+  roles         UserRole[]
+  articles      NewsArticle[]
+  matchReports  MatchReport[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Role {
+  id          String     @id @default(uuid())
+  name        String     @unique // SUPER_ADMIN, CONTENT_EDITOR, MEDIA_MANAGER, MATCH_DAY_EDITOR, SHOP_MANAGER, VIEWER
+  description String?
+  users       UserRole[]
+}
+
+model UserRole {
+  userId String
+  roleId String
+  user   User @relation(fields: [userId], references: [id])
+  role   Role @relation(fields: [roleId], references: [id])
+  @@id([userId, roleId])
+}
+
+// ───────────────────────────────
+// CLUB IDENTITY (⚠️ NEEDS CLUB INPUT)
+// ───────────────────────────────
+
+model ClubProfile {
+  id            String   @id @default(uuid())
+  foundedYear   Int?               // ⚠️ needed
+  history       String?  @db.Text  // ⚠️ needed
+  vision        String?  @db.Text  // ⚠️ needed
+  mission       String?  @db.Text  // ⚠️ needed
+  motto         String?            // ⚠️ needed
+  crestUrl      String?            // ⚠️ needed (logo asset)
+  primaryColor  String?            // ⚠️ needed (brand hex)
+  secondaryColor String?           // ⚠️ needed
+  stadiumName   String?            // ⚠️ needed
+  stadiumAddress String?           // ⚠️ needed
+  // ARCHITECTURAL ADDITION (Admin CMS phase): Settings module needs to
+  // manage contact details, social links, SEO defaults, and homepage
+  // hero image from the dashboard — none of that had a DB home before;
+  // it lived only as hardcoded fallbacks in src/config/site.ts. Those
+  // config constants remain as the fallback when this row's fields are
+  // still null (see src/lib/data/settings.ts), so the public site never
+  // breaks before a SUPER_ADMIN fills these in.
+  contactEmail   String?
+  contactPhone   String?
+  contactAddress String?
+  facebookUrl    String?
+  instagramUrl   String?
+  twitterUrl     String?
+  youtubeUrl     String?
+  tiktokUrl      String?
+  seoDefaultTitle       String?
+  seoDefaultDescription String? @db.Text
+  homepageHeroImageUrl  String?
+  updatedAt     DateTime @updatedAt
+}
+
+// ───────────────────────────────
+// STAFF & MANAGEMENT
+// ───────────────────────────────
+
+model StaffCategory {
+  id      String  @id @default(uuid())
+  name    String  @unique // "Management", "Technical Staff", "Medical", "Administration"
+  staff   StaffMember[]
+}
+
+model StaffMember {
+  id           String   @id @default(uuid())
+  fullName     String
+  role         String    // e.g. "Head Coach", "Club Chairman"
+  bio          String?  @db.Text
+  photoUrl     String?
+  categoryId   String
+  category     StaffCategory @relation(fields: [categoryId], references: [id])
+  displayOrder Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+}
+
+// ───────────────────────────────
+// TEAM & PLAYERS
+// ───────────────────────────────
+
+model Team {
+  id        String   @id @default(uuid())
+  name      String   // "Senior Men", "U20", "Women's Team" ⚠️ confirm which squads exist
+  players   PlayerSquad[]
+}
+
+model Position {
+  id      String  @id @default(uuid())
+  name    String  @unique // Goalkeeper, Defender, Midfielder, Forward
+  players Player[]
+}
+
+model Player {
+  id            String   @id @default(uuid())
+  fullName      String
+  // ARCHITECTURAL ADDITION (Team & Player Module phase): SEO-friendly
+  // dynamic routes need a stable, human-readable URL segment instead of
+  // the raw UUID (e.g. /team/john-mukasa, not /team/8f2c1e...). Generated
+  // from fullName at creation time (see slugify() in src/lib/utils.ts);
+  // uniqueness across players with the same name is an admin-side concern
+  // (e.g. append a numeric suffix) once the player-creation form exists —
+  // not yet built, so not yet enforced beyond the DB constraint below.
+  slug          String   @unique
+  jerseyNumber  Int?
+  dateOfBirth   DateTime?
+  nationality   String?
+  heightCm      Int?
+  positionId    String?
+  position      Position? @relation(fields: [positionId], references: [id])
+  bio           String?  @db.Text
+  photoUrl      String?
+  joinedDate    DateTime?
+  isActive      Boolean  @default(true)
+  squads        PlayerSquad[]
+  stats         PlayerStat[]
+}
+
+model PlayerSquad {
+  playerId  String
+  teamId    String
+  seasonId  String
+  player    Player @relation(fields: [playerId], references: [id])
+  team      Team   @relation(fields: [teamId], references: [id])
+  season    Season @relation(fields: [seasonId], references: [id])
+  @@id([playerId, teamId, seasonId])
+}
+
+model PlayerStat {
+  id            String  @id @default(uuid())
+  playerId      String
+  seasonId      String
+  appearances   Int     @default(0)
+  goals         Int     @default(0)
+  assists       Int     @default(0)
+  yellowCards   Int     @default(0)
+  redCards      Int     @default(0)
+  minutesPlayed Int     @default(0)
+  // ARCHITECTURAL ADDITION (Team & Player Module phase): goalkeeper-
+  // specific statistics. Deliberately optional and living on the same
+  // PlayerStat row (rather than a separate GoalkeeperStat table) — a
+  // goalkeeper's season stats are still fundamentally "one row per
+  // player per season," just with a few extra applicable columns; a
+  // second table would mean an extra join and an extra empty row to
+  // manage for every non-goalkeeper. These stay null for outfield
+  // players and for goalkeepers until real match data exists — never
+  // defaulted to 0, which would falsely claim "0 saves recorded" instead
+  // of "not tracked yet."
+  cleanSheets     Int?
+  saves           Int?
+  savePercentage  Float?
+  penaltiesSaved  Int?
+  goalsConceded   Int?
+  player        Player  @relation(fields: [playerId], references: [id])
+  season        Season  @relation(fields: [seasonId], references: [id])
+}
+
+// ───────────────────────────────
+// COMPETITIONS, FIXTURES, RESULTS
+// ───────────────────────────────
+
+model Season {
+  id         String   @id @default(uuid())
+  label      String   // "2025/2026" ⚠️ confirm league season the club plays in
+  startDate  DateTime
+  endDate    DateTime
+  isCurrent  Boolean  @default(false)
+  squads     PlayerSquad[]
+  fixtures   Fixture[]
+  stats      PlayerStat[]
+  tableEntries LeagueTableEntry[]
+}
+
+model Competition {
+  id     String @id @default(uuid())
+  name   String  // ⚠️ e.g. "Uganda Premier League", "Uganda Cup" — confirm exact league(s)
+  type   String  // LEAGUE, CUP, FRIENDLY
+  fixtures Fixture[]
+  tableEntries LeagueTableEntry[]
+}
+
+model Venue {
+  id       String @id @default(uuid())
+  name     String
+  address  String?
+  fixtures Fixture[]
+}
+
+model Fixture {
+  id            String   @id @default(uuid())
+  seasonId      String
+  competitionId String
+  venueId       String?
+  homeTeamName  String   // opponent name if not internal team object
+  awayTeamName  String
+  isHome        Boolean
+  kickoffAt     DateTime
+  status        String   @default("SCHEDULED") // SCHEDULED, LIVE, FULL_TIME, POSTPONED, CANCELLED
+  homeScore     Int?
+  awayScore     Int?
+  ticketingEnabled Boolean @default(false)
+  season        Season      @relation(fields: [seasonId], references: [id])
+  competition   Competition @relation(fields: [competitionId], references: [id])
+  venue         Venue?      @relation(fields: [venueId], references: [id])
+  matchReport   MatchReport?
+  matchStatistics MatchStatistics?
+  ticketTypes   TicketType[]
+}
+
+model LeagueTableEntry {
+  id            String  @id @default(uuid())
+  seasonId      String
+  competitionId String
+  teamName      String  // "Mukono Tigers SC" or opponent, if we store full table
+  played        Int     @default(0)
+  won           Int     @default(0)
+  drawn         Int     @default(0)
+  lost          Int     @default(0)
+  goalsFor      Int     @default(0)
+  goalsAgainst  Int     @default(0)
+  points        Int     @default(0)
+  position      Int
+  season        Season      @relation(fields: [seasonId], references: [id])
+  competition   Competition @relation(fields: [competitionId], references: [id])
+}
+
+model MatchReport {
+  id          String   @id @default(uuid())
+  fixtureId   String   @unique
+  title       String
+  body        String   @db.Text
+  coverImageUrl String?
+  authorId    String?
+  // ARCHITECTURAL FIX (News, Match Reports & Media phase): this field
+  // existed with no matching `@relation` — a dangling foreign key that
+  // could store a User id but couldn't be joined to fetch the author's
+  // name, unlike the equivalent field on NewsArticle. Added the relation
+  // so match reports can show author info the same way news articles do.
+  author      User?    @relation(fields: [authorId], references: [id])
+  publishedAt DateTime?
+  fixture     Fixture  @relation(fields: [fixtureId], references: [id])
+}
+
+// ARCHITECTURAL ADDITION (News, Match Reports & Media phase): "Match
+// statistics (where available)" was requested but no model existed for
+// them at all — not even optional fields on Fixture. One row per fixture,
+// every column optional, so the match report page can render only the
+// rows that were actually recorded rather than fabricating a 0-0 stat
+// comparison. See src/components/football/MatchStatistics.tsx for how
+// "where available" is honored — home/away pairs are shown only when at
+// least one side has a real number.
+model MatchStatistics {
+  id                String  @id @default(uuid())
+  fixtureId         String  @unique
+  possessionHome    Int?
+  possessionAway    Int?
+  shotsHome         Int?
+  shotsAway         Int?
+  shotsOnTargetHome Int?
+  shotsOnTargetAway Int?
+  cornersHome       Int?
+  cornersAway       Int?
+  foulsHome         Int?
+  foulsAway         Int?
+  fixture           Fixture @relation(fields: [fixtureId], references: [id])
+}
+
+// ───────────────────────────────
+// NEWS
+// ───────────────────────────────
+
+model NewsCategory {
+  id     String @id @default(uuid())
+  name   String @unique // "Club News", "Transfers", "Community", "Match Reports"
+  articles NewsArticle[]
+}
+
+model NewsArticle {
+  id           String   @id @default(uuid())
+  title        String
+  slug         String   @unique
+  excerpt      String?
+  body         String   @db.Text
+  coverImageUrl String?
+  categoryId   String?
+  category     NewsCategory? @relation(fields: [categoryId], references: [id])
+  authorId     String?
+  author       User? @relation(fields: [authorId], references: [id])
+  status       String   @default("DRAFT") // DRAFT, PUBLISHED, ARCHIVED
+  publishedAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// ───────────────────────────────
+// MEDIA: GALLERY & VIDEO
+// ───────────────────────────────
+
+model GalleryAlbum {
+  id        String   @id @default(uuid())
+  title     String
+  description String?
+  coverImageUrl String?
+  // ARCHITECTURAL ADDITION (Admin CMS phase): "Album ordering" was
+  // requested but nothing here supported anything but creation-date order.
+  displayOrder Int   @default(0)
+  images    GalleryImage[]
+  createdAt DateTime @default(now())
+}
+
+model GalleryImage {
+  id        String   @id @default(uuid())
+  albumId   String
+  imageUrl  String
+  caption   String?
+  album     GalleryAlbum @relation(fields: [albumId], references: [id])
+}
+
+model VideoCategory {
+  id     String @id @default(uuid())
+  name   String @unique // "Highlights", "Interviews", "Behind the Scenes"
+  videos VideoEntry[]
+}
+
+model VideoEntry {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  provider    String   // YOUTUBE, VIMEO, SUPABASE_STORAGE ⚠️ confirm hosting choice
+  externalUrl String?
+  storagePath String?
+  thumbnailUrl String?
+  categoryId  String?
+  category    VideoCategory? @relation(fields: [categoryId], references: [id])
+  // ARCHITECTURAL ADDITION (Admin CMS phase): "Featured videos" was
+  // requested but nothing distinguished a video as such.
+  isFeatured  Boolean  @default(false)
+  publishedAt DateTime?
+}
+
+// ───────────────────────────────
+// SPONSORS  (⚠️ NEEDS CLUB INPUT — tiers, logos, contracts)
+// ───────────────────────────────
+
+model SponsorTier {
+  id       String @id @default(uuid())
+  name     String @unique // "Principal Sponsor", "Official Partner", "Community Partner"
+  rank     Int
+  sponsors Sponsor[]
+}
+
+model Sponsor {
+  id          String   @id @default(uuid())
+  name        String
+  logoUrl     String?
+  websiteUrl  String?
+  tierId      String?
+  tier        SponsorTier? @relation(fields: [tierId], references: [id])
+  // ARCHITECTURAL ADDITION (Admin CMS phase): "Display ordering" was
+  // requested but only SponsorTier.rank existed — that orders tiers
+  // against each other, not sponsors within the same tier.
+  displayOrder Int     @default(0)
+  isActive    Boolean  @default(true)
+}
+
+// ───────────────────────────────
+// CLUB SHOP (⚠️ NEEDS CLUB INPUT — payment provider, delivery, currency)
+// ───────────────────────────────
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  description String?  @db.Text
+  basePrice   Decimal  // ⚠️ currency: UGX confirm formatting/tax rules
+  category    String?  // Jersey, Merchandise, Accessories
+  isActive    Boolean  @default(true)
+  variants    ProductVariant[]
+  images      ProductImage[]
+}
+
+model ProductVariant {
+  id         String  @id @default(uuid())
+  productId  String
+  size       String?
+  color      String?
+  sku        String  @unique
+  stock      Int     @default(0)
+  priceOverride Decimal?
+  product    Product @relation(fields: [productId], references: [id])
+  orderItems OrderItem[]
+}
+
+model ProductImage {
+  id        String @id @default(uuid())
+  productId String
+  imageUrl  String
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Order {
+  id             String   @id @default(uuid())
+  customerName   String
+  customerEmail  String
+  customerPhone  String?
+  shippingAddress String?
+  status         String   @default("PENDING") // PENDING, PAID, SHIPPED, DELIVERED, CANCELLED
+  totalAmount    Decimal
+  paymentRef     String?  // ⚠️ depends on payment gateway chosen
+  items          OrderItem[]
+  createdAt      DateTime @default(now())
+}
+
+model OrderItem {
+  id         String  @id @default(uuid())
+  orderId    String
+  variantId  String
+  quantity   Int
+  unitPrice  Decimal
+  order      Order   @relation(fields: [orderId], references: [id])
+  variant    ProductVariant @relation(fields: [variantId], references: [id])
+}
+
+// ───────────────────────────────
+// TICKETING (⚠️ HEAVILY DEPENDENT ON CLUB INPUT)
+// ───────────────────────────────
+
+model TicketType {
+  id         String  @id @default(uuid())
+  fixtureId  String
+  name       String  // "VIP", "Regular", "Student" ⚠️ confirm categories & pricing
+  price      Decimal
+  quantityAvailable Int
+  fixture    Fixture @relation(fields: [fixtureId], references: [id])
+  orders     TicketOrder[]
+}
+
+model TicketOrder {
+  id             String   @id @default(uuid())
+  ticketTypeId   String
+  buyerName      String
+  buyerEmail     String
+  buyerPhone     String?
+  quantity       Int
+  totalAmount    Decimal
+  paymentRef     String?  // ⚠️ mobile money / card gateway — confirm provider
+  status         String   @default("PENDING")
+  qrCode         String?  // for gate scanning, phase 2+
+  ticketType     TicketType @relation(fields: [ticketTypeId], references: [id])
+  createdAt      DateTime @default(now())
+}
+
+// ───────────────────────────────
+// FAN MEMBERSHIP (⚠️ NEEDS CLUB INPUT — tiers & benefits)
+// ───────────────────────────────
+
+model MembershipPlan {
+  id           String  @id @default(uuid())
+  name         String  // "Bronze", "Silver", "Gold" ⚠️ confirm tiers
+  description  String? @db.Text
+  price        Decimal
+  billingCycle String  @default("ANNUAL") // MONTHLY, ANNUAL
+  benefits     String? @db.Text
+  subscriptions MembershipSubscription[]
+}
+
+model MembershipSubscription {
+  id         String   @id @default(uuid())
+  planId     String
+  fullName   String
+  email      String
+  phone      String?
+  status     String   @default("ACTIVE") // ACTIVE, EXPIRED, CANCELLED
+  startDate  DateTime @default(now())
+  endDate    DateTime?
+  plan       MembershipPlan @relation(fields: [planId], references: [id])
+}
+
+// ───────────────────────────────
+// CONTACT / INBOUND
+// ───────────────────────────────
+
+model ContactMessage {
+  id         String   @id @default(uuid())
+  fullName   String
+  email      String
+  phone      String?
+  subject    String?
+  message    String   @db.Text
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}
+
+// ARCHITECTURAL ADDITION (Admin CMS phase): the public newsletter signup
+// action (src/actions/newsletter.actions.ts, built in the Homepage phase)
+// validated and logged an email but explicitly did NOT persist it — no
+// model existed. The Admin CMS's Newsletter module needs real subscriber
+// management (list, export, unsubscribe), so this was added now rather
+// than continuing to defer it. Mirrors MembershipSubscription's shape.
+model NewsletterSubscriber {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  isActive     Boolean   @default(true)
+  subscribedAt DateTime  @default(now())
+  unsubscribedAt DateTime?
+}

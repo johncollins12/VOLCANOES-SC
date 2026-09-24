@@ -1,0 +1,185 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * DESIGN TOKENS — Volcanoes FC
+ * ────────────────────────────
+ * Official club identity (confirmed brand roles):
+ *   1. Primary Base   — dark charcoal / off-black   (--color-charcoal)
+ *   2. Primary Accent — crimson red                 (--color-accent)
+ *   3. Secondary Accent — bright cyan blue           (--color-cyan)
+ *   4. Gold/Warm Accent — muted gold                 (--color-gold)
+ *   5. Neutral Light  — crisp pure white             (--color-surface)
+ *   6. Neutral Dark   — dark earth brown             (--color-earth)
+ * Exact shades below are our proposed premium tones for that identity —
+ * confirm against an official brand guideline/kit if one exists.
+ * See DESIGN_SYSTEM.md for full rationale and usage rules.
+ *
+ * Token NAMES kept from the previous (Mukono Tigers) identity where the
+ * ROLE is unchanged (surface/ink/muted/border/accent/danger/success) —
+ * only their values moved. `navy`/`royal` were renamed to
+ * `charcoal`/`cyan` because their MEANING changed (navy was literally a
+ * blue; the new primary base isn't blue at all), so keeping the old
+ * names would have been actively misleading. `gold` and `earth` are new.
+ *
+ * This is the ONLY place color values are defined as literals. Every
+ * component consumes them through Tailwind's semantic tokens (bg-charcoal,
+ * text-accent, etc. — see tailwind.config.ts), so a future palette
+ * refinement only ever touches this file.
+ *
+ * FORMAT: space-separated R G B channels (not hex), so Tailwind opacity
+ * modifiers (`bg-accent/10`, `border-border/50`) work — composed as
+ * `rgb(var(--x) / <alpha-value>)` in tailwind.config.ts.
+ *
+ * Dark mode: toggled via a `.dark` class on <html> (see ThemeToggle).
+ * Token NAMES stay identical between modes — only the values swap —
+ * so components never need `dark:` prefixed color classes.
+ */
+:root {
+  /* Surfaces (Neutral Light — crisp pure white) */
+  --color-surface: 255 255 255;        /* #FFFFFF — page/card background */
+  --color-surface-muted: 246 245 243;  /* #F6F5F3 — warm-neutral section/alt background */
+  --color-surface-raised: 255 255 255; /* #FFFFFF — elevated cards (uses shadow, not tint, for lift) */
+
+  /* Brand — Primary Base: dark charcoal / off-black (club chrome: nav, footer, hero panels) */
+  --color-charcoal: 24 24 26;          /* #18181A */
+  --color-charcoal-light: 38 38 41;    /* #262629 — hover / lighter panel */
+
+  /* Brand — Secondary Accent: bright cyan blue (links, secondary buttons, info states) */
+  --color-cyan: 0 131 163;             /* #0083A3 — darkened enough from pure cyan to hold AA text contrast on white */
+  --color-cyan-dark: 0 105 130;        /* #006982 — hover */
+
+  /* Brand — Primary Accent: crimson red (primary CTAs, live indicators, key highlights) */
+  --color-accent: 200 16 46;           /* #C8102E */
+  --color-accent-dark: 165 13 38;      /* #A50D26 — hover */
+
+  /* Brand — Gold/Warm Accent: muted gold (used sparingly — badges, dividers, honours) */
+  --color-gold: 201 162 39;            /* #C9A227 */
+  --color-gold-dark: 168 135 32;       /* #A88720 — hover */
+
+  /* Brand — Neutral Dark: dark earth brown (used sparingly — an alternate dark section tone, distinct from charcoal) */
+  --color-earth: 74 53 36;             /* #4A3524 */
+  --color-earth-light: 94 68 47;       /* #5E442F */
+
+  /* Text */
+  --color-ink: 20 19 18;               /* #141312 — primary text on light surfaces (warm near-black, not blue-black) */
+  --color-muted: 107 101 92;           /* #6B655C — secondary/supporting text (warm gray) */
+
+  /* Structure */
+  --color-border: 228 224 217;         /* #E4E0D9 — warm-neutral border */
+
+  /* Semantic (mapped onto the confirmed identity: red = alert, cyan = positive/info) */
+  --color-danger: 200 16 46;           /* alias of accent */
+  --color-success: 0 131 163;          /* alias of cyan — "positive/confirmed" */
+
+  --font-display: var(--font-display-raw, system-ui);
+  --font-body: var(--font-body-raw, system-ui);
+  --font-mono: var(--font-mono-raw, monospace);
+
+  /* Motion tokens — see DESIGN_SYSTEM.md §Animation */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+}
+
+.dark {
+  --color-surface: 15 14 13;           /* #0F0E0D — near-black warm page bg */
+  --color-surface-muted: 24 22 20;     /* #181614 — panel bg */
+  --color-surface-raised: 30 28 25;    /* #1E1C19 — elevated cards, one step up */
+
+  --color-charcoal: 10 10 11;          /* #0A0A0B — nav/footer chrome, slightly deeper than page bg for separation */
+  --color-charcoal-light: 26 26 28;    /* #1A1A1C */
+
+  --color-cyan: 41 196 232;            /* #29C4E8 — brighter for contrast on dark */
+  --color-cyan-dark: 100 214 240;      /* #64D6F0 — "hover" here means lighter, not darker */
+
+  --color-accent: 230 57 80;           /* #E63950 — brighter red for dark surfaces */
+  --color-accent-dark: 200 30 54;      /* #C81E36 */
+
+  --color-gold: 217 184 74;            /* #D9B84A — brighter gold for contrast on dark */
+  --color-gold-dark: 235 205 110;      /* #EBCD6E */
+
+  --color-earth: 110 79 55;            /* #6E4F37 */
+  --color-earth-light: 138 100 70;     /* #8A6446 */
+
+  --color-ink: 244 242 239;            /* #F4F2EF — primary text flips to warm near-white */
+  --color-muted: 168 160 150;          /* #A8A096 */
+
+  --color-border: 51 46 40;            /* #332E28 */
+
+  --color-danger: 230 57 80;
+  --color-success: 41 196 232;
+}
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-surface text-ink antialiased;
+    font-family: var(--font-body);
+    transition: background-color var(--duration-base) var(--ease-standard),
+      color var(--duration-base) var(--ease-standard);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: 0.01em;
+    font-weight: 600;
+  }
+
+  /* Tabular figures for scores/stats wherever font-mono is used */
+  .font-mono {
+    font-variant-numeric: tabular-nums;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--color-cyan));
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  /* Subtle lift used on interactive cards (player cards, news cards) */
+  .hover-lift {
+    transition: transform var(--duration-base) var(--ease-standard),
+      box-shadow var(--duration-base) var(--ease-standard);
+  }
+  .hover-lift:hover {
+    transform: translateY(-2px);
+  }
+
+  /* Live match pulse — used sparingly, one instance per view max */
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.4;
+    }
+  }
+  .animate-pulse-dot {
+    animation: pulse-dot 1.4s ease-in-out infinite;
+  }
+}
