@@ -9,7 +9,7 @@
  * ⚠️ = placeholder awaiting real club input. Do not treat these as final.
  */
 export const SITE_CONFIG = {
-  name: 'SC VolLCANOES',
+  name: 'SC VOLCANOES',
   shortName: 'SC VOLCANOES',
   legalName: 'VOLCANOES SPORTS CLUB', // ⚠️ placeholder — confirm
 
