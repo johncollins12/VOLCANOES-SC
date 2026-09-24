@@ -4,7 +4,7 @@
   "private": true,
   "description": "Official digital platform for Volcanoes FC",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev", "postinstall": "prisma generate",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
