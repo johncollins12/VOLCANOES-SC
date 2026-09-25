@@ -36,7 +36,6 @@ export async function getRecentGalleryImages(limit = 8): Promise<GalleryImageFor
   }
 }
 
-export interface GalleryAlbumDetail {
 export interface GalleryAlbumSummary {
   id: string;
   title: string;
