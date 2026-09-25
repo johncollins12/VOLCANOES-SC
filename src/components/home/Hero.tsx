@@ -38,7 +38,7 @@ export function Hero({ backgroundImageUrl, backgroundImages, motto, foundedYear 
           className="absolute inset-0 bg-[repeating-linear-gradient(135deg,rgba(255,255,255,0.03)_0px,rgba(255,255,255,0.03)_2px,transparent_2px,transparent_40px)]"
         />
       )}
-      <div className="absolute inset-0 bg-gradient-to-b from-charcoal/80 via-charcoal/85 to-charcoal" aria-hidden />
+            <div className="absolute inset-0 bg-gradient-to-b from-charcoal/40 via-charcoal/50 to-charcoal/80" aria-hidden />
 
       <Container className="relative flex flex-col items-center gap-6 py-20 text-center sm:py-28">
         <LogoMark className="h-16 w-16 sm:h-20 sm:w-20" />
@@ -54,10 +54,11 @@ export function Hero({ backgroundImageUrl, backgroundImages, motto, foundedYear 
           </span>
         </div>
 
-        <h1 className="font-display text-4xl font-bold leading-tight sm:text-6xl">{SITE_CONFIG.name}</h1>
-        <p className="text-sm font-semibold uppercase tracking-widest text-white/60">{SITE_CONFIG.nickname}</p>
+                <h1 className="font-display text-4xl font-bold leading-tight drop-shadow-lg sm:text-6xl">{SITE_CONFIG.name}</h1>
+        <p className="text-sm font-semibold uppercase tracking-widest text-white/80 drop-shadow">{SITE_CONFIG.nickname}</p>
 
-        <p className="max-w-xl text-base text-white/70 sm:text-lg">
+
+                <p className="max-w-xl text-base text-white/85 drop-shadow sm:text-lg">
           {resolvedMotto || 'Club motto coming soon.'}
         </p>
 
