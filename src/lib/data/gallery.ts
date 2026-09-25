@@ -2,6 +2,41 @@ import { prisma } from '@/lib/prisma';
 import { resolvePagination, toPaginatedResult } from '@/lib/pagination';
 import type { PaginatedResult } from '@/types';
 
+export interface GalleryImageForSlider {
+  id: string;
+  imageUrl: string;
+  caption: string | null;
+  albumId: string;
+  albumTitle: string;
+}
+
+export async function getRecentGalleryImages(limit = 8): Promise<GalleryImageForSlider[]> {
+  try {
+    const albums = await prisma.galleryAlbum.findMany({
+      orderBy: [{ displayOrder: 'asc' }, { createdAt: 'desc' }],
+      take: 10,
+      select: {
+        id: true,
+        title: true,
+        images: { select: { id: true, imageUrl: true, caption: true } },
+      },
+    });
+
+    const images: GalleryImageForSlider[] = [];
+    for (const album of albums) {
+      for (const image of album.images) {
+        images.push({ id: image.id, imageUrl: image.imageUrl, caption: image.caption, albumId: album.id, albumTitle: album.title });
+        if (images.length >= limit) return images;
+      }
+    }
+    return images;
+  } catch (error) {
+    console.error('[getRecentGalleryImages] failed to load images:', error);
+    return [];
+  }
+}
+
+export interface GalleryAlbumDetail {
 export interface GalleryAlbumSummary {
   id: string;
   title: string;
