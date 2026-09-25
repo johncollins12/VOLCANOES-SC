@@ -9,4 +9,4 @@ export * from './ClubStatisticsSection';
 export * from './FanCTASection';
 export * from './NewsletterSection';
 export * from './MembershipCTA';
-export * from './HomeGallerySlider';
+export * from './HeroBackgroundSlideshow';

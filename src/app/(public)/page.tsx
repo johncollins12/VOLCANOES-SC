@@ -23,7 +23,6 @@ import {
   ClubStatisticsSection,
   FanCTASection,
   NewsletterSection,
-  HomeGallerySlider,
 } from '@/components/home';
 
 export const revalidate = 60;
@@ -67,10 +66,10 @@ export default async function HomePage() {
 
       <Hero
         backgroundImageUrl={clubProfile?.homepageHeroImageUrl}
+        backgroundImages={galleryImages}
         motto={clubProfile?.motto}
         foundedYear={clubProfile?.foundedYear}
       />
-      <HomeGallerySlider images={galleryImages} />
       <NextMatchSection nextFixture={nextFixture} />
       <LatestNewsSection articles={latestNews} />
       <FeaturedPlayersSection players={featuredPlayers} />

@@ -4,34 +4,26 @@ import { Container } from '@/components/ui/Container';
 import { buttonVariants } from '@/components/ui/Button';
 import { LogoMark } from '@/components/layout/LogoMark';
 import { SITE_CONFIG } from '@/config/site';
+import { HeroBackgroundSlideshow } from './HeroBackgroundSlideshow';
+import type { GalleryImageForSlider } from '@/lib/data/gallery';
 
 export interface HeroProps {
-  /** Real hero photo, once the club supplies one (docs/CLUB_INFO_NEEDED.md §7.1). Falls back to a plain gradient — never a fabricated stock photo. */
   backgroundImageUrl?: string | null;
-  /** Overrides SITE_CONFIG.tagline once a SUPER_ADMIN saves one in /admin/settings. */
+  backgroundImages?: GalleryImageForSlider[];
   motto?: string | null;
-  /** Overrides SITE_CONFIG.foundedYear once saved in /admin/settings. */
   foundedYear?: number | null;
 }
 
-/**
- * Full-width homepage hero. Pulls copy from SITE_CONFIG (src/config/site.ts)
- * by default, but the page can now pass real ClubProfile-backed values
- * (see src/lib/data/settings.ts) once a SUPER_ADMIN has saved them —
- * this component's JSX didn't need to change, only where the values come
- * from, exactly as originally planned in this comment.
- */
-export function Hero({ backgroundImageUrl, motto, foundedYear }: HeroProps) {
+export function Hero({ backgroundImageUrl, backgroundImages, motto, foundedYear }: HeroProps) {
   const resolvedMotto = motto || SITE_CONFIG.tagline;
   const resolvedFoundedYear = foundedYear ?? SITE_CONFIG.foundedYear;
+  const hasSlideshow = (backgroundImages?.length ?? 0) > 0;
 
   return (
     <section className="relative overflow-hidden bg-charcoal text-white">
-      {/* Background image placeholder layer — swaps to a real <Image> once
-          the club provides hero photography; a plain gradient + subtle
-          stripe pattern stands in for it so the section still looks
-          intentional, not broken, in the meantime. */}
-      {backgroundImageUrl ? (
+      {hasSlideshow ? (
+        <HeroBackgroundSlideshow images={backgroundImages!} />
+      ) : backgroundImageUrl ? (
         <Image
           src={backgroundImageUrl}
           alt=""
@@ -64,8 +56,7 @@ export function Hero({ backgroundImageUrl, motto, foundedYear }: HeroProps) {
 
         <h1 className="font-display text-4xl font-bold leading-tight sm:text-6xl">{SITE_CONFIG.name}</h1>
         <p className="text-sm font-semibold uppercase tracking-widest text-white/60">{SITE_CONFIG.nickname}</p>
-        {/* Motto placeholder — falls back to this generic line until a
-            motto exists in either ClubProfile or SITE_CONFIG. */}
+
         <p className="max-w-xl text-base text-white/70 sm:text-lg">
           {resolvedMotto || 'Club motto coming soon.'}
         </p>
